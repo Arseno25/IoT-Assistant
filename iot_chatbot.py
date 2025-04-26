@@ -394,9 +394,12 @@ Your expertise includes:
         return self.db.get_conversation_history(limit)
 
     def __del__(self):
-        """Cleanup database connection when object is destroyed"""
-        if hasattr(self, 'db'):
-            self.db.close()
+        try:
+            # Only close database connection if we're in an application context
+            if hasattr(self, 'db') and self.db:
+                self.db.close()
+        except Exception as e:
+            logging.error(f"Error closing database connection: {e}")
 
 def init_chatbot():
     global chatbot

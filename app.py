@@ -389,10 +389,25 @@ def delete_account():
         return jsonify({'error': 'Error deleting account'}), 500
 
 if __name__ == '__main__':
-    try:
+    # Check if running in production (cPanel)
+    if os.environ.get('FLASK_ENV') == 'production':
+        # Production settings
+        port = int(os.environ.get('PORT', 5000))
+        socketio.run(
+            app,
+            host='0.0.0.0',
+            port=port,
+            debug=False,
+            allow_unsafe_werkzeug=True
+        )
+    else:
+        # Development settings
         port = find_available_port()
         print(f"Starting server on port {port}")
         print(f"Open http://localhost:{port} in your browser")
-        socketio.run(app, debug=True, port=port, host='0.0.0.0')
-    except Exception as e:
-        print(f"Error starting server: {e}") 
+        socketio.run(
+            app,
+            host='0.0.0.0',
+            port=port,
+            debug=True
+        ) 
