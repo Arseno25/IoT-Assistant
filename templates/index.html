@@ -1631,8 +1631,7 @@
         }
 
           // Function to load chat history
-          function loadChatHistory(chatId) {
-            console.log('Loading chat history for chat ID:', chatId);
+                      function loadChatHistory(chatId) {
 
           // Clear current messages
           chatMessages.innerHTML = '';
@@ -1652,7 +1651,7 @@
               return response.json();
             })
             .then(data => {
-              console.log('Received chat history:', data);
+
 
               // Remove loading indicator
               chatMessages.innerHTML = '';
@@ -1710,7 +1709,7 @@
 
             // Setup click handlers for chat history items
             const historyItems = document.querySelectorAll('.chat-history-item');
-            console.log('Found chat history items:', historyItems.length);
+
 
           // Load active chat if exists in localStorage and is not a new chat
           const activeChatId = localStorage.getItem('activeChatId');
@@ -1822,7 +1821,7 @@
           historyItems.forEach(function (item) {
             item.addEventListener('click', function () {
               const chatId = this.getAttribute('data-chat-id');
-              console.log('Chat history item clicked:', chatId);
+
 
               // Save active chat ID to localStorage and mark as not new chat
               localStorage.setItem('activeChatId', chatId);
@@ -1901,7 +1900,7 @@
 
             // Socket event handlers
             socket.on('connect', () => {
-              console.log('Connected to server');
+
             });
 
             socket.on('chat_created', (data) => {
@@ -1909,7 +1908,7 @@
                 console.error('Error creating new chat:', data.error);
                 addMessage('Error: ' + data.error);
               } else {
-                console.log('New chat created:', data);
+
                 localStorage.setItem('activeChatId', data.chat_id);
                 localStorage.setItem('isNewChat', 'false');
               }
@@ -1972,7 +1971,7 @@
             });
 
             socket.on('disconnect', () => {
-              console.log('Disconnected from server');
+
             });
 
             userInput.focus();
