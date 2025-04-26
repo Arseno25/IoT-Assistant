@@ -643,6 +643,18 @@
       transform: translateY(0);
     }
 
+    .chat-input button.stop {
+      background: var(--error-color);
+    }
+
+    .chat-input button.stop:hover {
+      background: #dc2626;
+    }
+
+    .chat-input button.stop i {
+      transform: rotate(90deg);
+    }
+
     .markdown-content {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       line-height: 1.5;
@@ -1845,22 +1857,40 @@
                 userInput.value = '';
                 typingIndicator.style.display = 'block';
 
-              // Get the current chat ID
-              const currentChatId = localStorage.getItem('activeChatId');
-              const isNewChat = localStorage.getItem('isNewChat') === 'true';
+                // Change send button to stop button
+                const sendButton = document.getElementById('send-button');
+                sendButton.innerHTML = '<i class="fas fa-stop"></i>';
+                sendButton.classList.add('stop');
+                sendButton.onclick = stopMessage;
 
-              // Send message to server for processing
-              socket.emit('send_message', {
-                message: message,
-                chatId: currentChatId,
-                is_new_chat: isNewChat
-              });
+                // Get the current chat ID
+                const currentChatId = localStorage.getItem('activeChatId');
+                const isNewChat = localStorage.getItem('isNewChat') === 'true';
 
-              // After sending first message in new chat, mark as not new
-              if (isNewChat) {
-                localStorage.setItem('isNewChat', 'false');
+                // Send message to server for processing
+                socket.emit('send_message', {
+                  message: message,
+                  chatId: currentChatId,
+                  is_new_chat: isNewChat
+                });
+
+                // After sending first message in new chat, mark as not new
+                if (isNewChat) {
+                  localStorage.setItem('isNewChat', 'false');
+                }
               }
             }
+
+            // Function to stop message processing
+            function stopMessage() {
+              socket.emit('stop_message');
+              typingIndicator.style.display = 'none';
+
+              // Change stop button back to send button
+              const sendButton = document.getElementById('send-button');
+              sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+              sendButton.classList.remove('stop');
+              sendButton.onclick = sendMessage;
             }
 
             // Function to send quick message
@@ -1887,14 +1917,31 @@
 
             socket.on('receive_message', (data) => {
               typingIndicator.style.display = 'none';
+
+              // Change stop button back to send button
+              const sendButton = document.getElementById('send-button');
+              sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+              sendButton.classList.remove('stop');
+              sendButton.onclick = sendMessage;
+
               if (data.message) {
                 addMessage(data.message);
               }
-            if (data.chat_id && !localStorage.getItem('activeChatId')) {
-              localStorage.setItem('activeChatId', data.chat_id);
-              localStorage.setItem('isNewChat', 'false');
-            }
-          });
+              if (data.chat_id && !localStorage.getItem('activeChatId')) {
+                localStorage.setItem('activeChatId', data.chat_id);
+                localStorage.setItem('isNewChat', 'false');
+              }
+            });
+
+            socket.on('message_stopped', () => {
+              typingIndicator.style.display = 'none';
+
+              // Change stop button back to send button
+              const sendButton = document.getElementById('send-button');
+              sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+              sendButton.classList.remove('stop');
+              sendButton.onclick = sendMessage;
+            });
 
         // Sidebar toggle functionality
         const sidebarToggle = document.getElementById('sidebarToggle');
