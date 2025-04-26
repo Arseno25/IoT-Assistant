@@ -204,6 +204,6 @@ For support, please:
 
 ## Contact
 
-Project Maintainer: [Your Name](mailto:your.email@example.com)
+Project Maintainer: [Arseno25](mailto:mrshadow2511@gmail.com)
 
-Project Link: [https://github.com/yourusername/iotassist](https://github.com/yourusername/iotassist) 
+Project Link: [https://github.com/Arseno25/iotassist](https://github.com/Arseno25/iotassist) 
