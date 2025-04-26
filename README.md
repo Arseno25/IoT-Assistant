@@ -206,4 +206,4 @@ For support, please:
 
 Project Maintainer: [Arseno25](mailto:mrshadow2511@gmail.com)
 
-Project Link: [https://github.com/Arseno25/iotassist](https://github.com/Arseno25/iotassist) 
+Project Link: [https://github.com/Arseno25/IoT-Assistant](https://github.com/Arseno25/IoT-Assistant) 
